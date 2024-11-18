@@ -87,7 +87,7 @@ def load_label_mapping(json_file):
         return json.load(f)
 
 
-def process_annotations(input_csv, output_csv, label_mapping_file, num_videos):
+def process_annotations(input_csv, output_csv, label_mapping_file):
     with open(label_mapping_file, "r") as f:
         label_mapping = json.load(f)
 
@@ -98,7 +98,7 @@ def process_annotations(input_csv, output_csv, label_mapping_file, num_videos):
         next(reader)
 
         for i, row in enumerate(reader):
-            if i >= num_videos:
+            if i >= NUM_VIDEOS:
                 break
             yt_id = row[0]
             labels = row[3]
@@ -142,7 +142,6 @@ def main():
         "balanced_train_segments.csv",
         ANNOTATIONS_FILE,
         "label_mapping.json",
-        NUM_VIDEOS,
     )
 
 
