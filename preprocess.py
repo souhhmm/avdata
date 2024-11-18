@@ -7,7 +7,7 @@ import yt_dlp as ytdl
 from pathlib import Path
 
 # configuration
-NUM_VIDEOS = 1
+NUM_VIDEOS = 3
 BASE_DIR = "./data"
 AUDIO_DIR = os.path.join(BASE_DIR, "audio_files")
 IMG_DIR = os.path.join(BASE_DIR, "rgb_frames")
@@ -136,7 +136,7 @@ def main():
             continue
 
         extract_audio(video_path, AUDIO_DIR, yt_id)
-        # extract_frames(video_path, IMG_DIR, yt_id)
+        extract_frames(video_path, IMG_DIR, yt_id)
 
     process_annotations(
         "balanced_train_segments.csv",
