@@ -7,7 +7,7 @@ import yt_dlp as ytdl
 from pathlib import Path
 
 # configuration
-NUM_VIDEOS = 3
+NUM_VIDEOS = 10
 BASE_DIR = "./data"
 AUDIO_DIR = os.path.join(BASE_DIR, "audio_files")
 IMG_DIR = os.path.join(BASE_DIR, "rgb_frames")
@@ -87,7 +87,9 @@ def load_label_mapping(json_file):
         return json.load(f)
 
 
-def process_annotations(input_csv, output_csv, label_mapping_file):
+def process_annotations(
+    input_csv, output_csv, label_mapping_file, downloaded_video_ids
+):
     with open(label_mapping_file, "r") as f:
         label_mapping = json.load(f)
 
@@ -97,20 +99,18 @@ def process_annotations(input_csv, output_csv, label_mapping_file):
         writer.writerow(["file_name", "label"])
         next(reader)
 
-        for i, row in enumerate(reader):
-            if i >= NUM_VIDEOS:
-                break
+        for row in reader:
             yt_id = row[0]
-            labels = row[3]
 
-            label_ids = labels.split(",")
-            # print(labels)
-            # print(label_ids)
-            label_names = [
-                label_mapping.get(label_id.strip(), "Unknown") for label_id in label_ids
-            ]
-            # print(label_names)
-            writer.writerow([yt_id, ",".join(label_names)])
+            # only process annotations for successfully downloaded videos
+            if yt_id in downloaded_video_ids:
+                labels = row[3]
+                label_ids = labels.split(",")
+                label_names = [
+                    label_mapping.get(label_id.strip(), "Unknown")
+                    for label_id in label_ids
+                ]
+                writer.writerow([yt_id, ",".join(label_names)])
 
 
 def main():
@@ -121,6 +121,8 @@ def main():
         on_bad_lines="skip",
         skipinitialspace=True,
     )
+
+    downloaded_video_ids = []
 
     for idx, row in dataset.iterrows():
         if idx >= NUM_VIDEOS:
@@ -135,6 +137,8 @@ def main():
             print(f"Error downloading video {yt_id}")
             continue
 
+        downloaded_video_ids.append(yt_id)
+
         extract_audio(video_path, AUDIO_DIR, yt_id)
         extract_frames(video_path, IMG_DIR, yt_id)
 
@@ -142,6 +146,7 @@ def main():
         "balanced_train_segments.csv",
         ANNOTATIONS_FILE,
         "label_mapping.json",
+        downloaded_video_ids,
     )
 
 
