@@ -20,7 +20,7 @@ def parse_options():
     # Adapter and Latent Params
     parser.add_argument('--adapter_dim', type=int, default=8, help='dimension of the low rank')
     parser.add_argument('--num_latent', type=int, default=4, help='number of latent tokens')
-    parser.add_argument('--num_classes', type=int, default=28, help='number of latent tokens')
+    parser.add_argument('--num_classes', type=int, default=527, help='number of latent tokens')
 
     ##### DATA
     parser.add_argument('--audio_dir', type=str, default='data/audio_files', help='dir of audio files')
