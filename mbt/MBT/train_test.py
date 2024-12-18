@@ -23,8 +23,8 @@ def parse_options():
     parser.add_argument('--num_classes', type=int, default=28, help='number of latent tokens')
 
     ##### DATA
-    parser.add_argument('--audio_dir', type=str, default='audio_files', help='dir of audio files')
-    parser.add_argument('--visual_dir', type=str, default='rgb_frames/', help='dir of rgb frames')
+    parser.add_argument('--audio_dir', type=str, default='data/audio_files', help='dir of audio files')
+    parser.add_argument('--visual_dir', type=str, default='data/rgb_frames/', help='dir of rgb frames')
 
     opts = parser.parse_args()
     torch.manual_seed(opts.seed)
@@ -135,8 +135,8 @@ def train_test(args):
 
     train_dataset = AV_Dataset('data/train.csv',args.audio_dir,args.visual_dir, 1.102, 2.762)
     test_dataset = AV_Dataset('data/test.csv',args.audio_dir,args.visual_dir, 1.102, 2.762)
-    trainloader = DataLoader(train_dataset, batch_size=args.batch_size, collate_fn=collate_fn, shuffle=True, num_workers=16)
-    testloader = DataLoader(test_dataset, batch_size=args.batch_size, collate_fn=collate_fn, shuffle=False, num_workers=16)
+    trainloader = DataLoader(train_dataset, batch_size=args.batch_size, collate_fn=collate_fn, shuffle=True, num_workers=2)
+    testloader = DataLoader(test_dataset, batch_size=args.batch_size, collate_fn=collate_fn, shuffle=False, num_workers=2)
     print("\t Dataset Loaded")
 
     model = AVmodel(num_classes=args.num_classes, num_latents=args.num_latent, dim=args.adapter_dim)

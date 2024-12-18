@@ -23,7 +23,7 @@ class AVmodel(nn.Module):
         https://github.com/YuanGongND/ast 
         """
         # use weight "Full AudioSet, 16 tstride, 16 fstride, without Weight Averaging, Model (0.442 mAP)"
-        ast_pretrained_weight = torch.load("mbt/MBT/models/audioset_16_16_0.4422.pth?dl=1") 
+        ast_pretrained_weight = torch.load("mbt/MBT/models/audioset_16_16_0.4422.pth?dl=1", weights_only=True) 
 
         # replace CNN for spec with 1d input channel
         self.v1.patch_embed.proj = nn.Conv2d(1, 768, kernel_size=(16, 16), stride=(16, 16))
