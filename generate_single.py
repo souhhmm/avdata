@@ -8,7 +8,7 @@ from pathlib import Path
 
 # configuration
 NUM_VIDEOS = 10
-BASE_DIR = "./data_single"
+BASE_DIR = "./data"
 AUDIO_DIR = os.path.join(BASE_DIR, "audio_files")
 IMG_DIR = os.path.join(BASE_DIR, "rgb_frames")
 CLIP_DIR = os.path.join(BASE_DIR, "10s_clips")
